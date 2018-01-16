@@ -27,10 +27,16 @@ public class SummitMeetingPattern implements Pattern {
     private OCR ocr;
     private Utils utils;
     private ImageHelper imageHelper = new ImageHelper();
+
     SummitMeetingPattern(OCR ocr, Utils utils) {
         System.out.println("欢迎您进入冲顶大会游戏模式");
         this.ocr = ocr;
         this.utils = utils;
+    }
+
+    @Override
+    public void reset() {
+
     }
 
     @Override
@@ -52,6 +58,7 @@ public class SummitMeetingPattern implements Pattern {
         System.out.println("识别时间：" + (System.currentTimeMillis() - beginOfDetect));
         if (questionAndAnswers == null || !questionAndAnswers.contains(QUESTION_FLAG)) {
             System.out.println("问题识别失败，输入回车继续运行");
+
             return;
         }
         //获取问题和答案

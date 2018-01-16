@@ -12,12 +12,12 @@ import utils.Utils;
 public class PatternFactory {
     public Pattern getPattern(int choice, OCR ocr, Utils utils) {
         switch (choice) {
-            case 1: {
-                return new MillionHeroPattern(ocr, utils);
-            }
-            case 2: {
-                return new SummitMeetingPattern(ocr, utils);
-            }
+//            case 1: {
+//                return new MillionHeroPattern(ocr, utils);
+//            }
+//            case 2: {
+//                return new SummitMeetingPattern(ocr, utils);
+//            }
             default: {
                 return new MillionHeroPattern(ocr, utils);
             }

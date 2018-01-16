@@ -78,6 +78,14 @@ public class Utils {
         String[] ans = remain.trim().split("\n");
         return new Information(question,ans);
     }
+
+
+//    public String getImage() {
+//        File curPhoto = new File(imagePath, "20180116151705" + ".png");
+//        return curPhoto.getAbsolutePath();
+//    }
+
+
     public String getImage() {
         //获取当前时间作为名字
         Date current = new Date();
@@ -105,7 +113,6 @@ public class Utils {
         System.err.println("获取图片失败");
         return null;
     }
-
 
     /**
      * 对rank值进行排序

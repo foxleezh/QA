@@ -20,21 +20,32 @@ import java.util.concurrent.FutureTask;
  */
 public class MillionHeroPattern implements Pattern {
     private static final String QUESTION_FLAG = "?";
-    private static final int START_X = 100;
+    private static final int START_X = 0;
     private static final int START_Y = 300;
-    private static final int WIDTH = 900;
+    private static final int WIDTH = 1000;
     private static final int HEIGHT = 900;
+
+//    private static final int START_X = 0;
+//    private static final int START_Y = 0;
+//    private static final int WIDTH = 1000;
+//    private static final int HEIGHT = 900;
 
 
     private OCR ocr;
     private Utils utils;
     private ImageHelper imageHelper = new ImageHelper();
+    public int retryCount;
 
     MillionHeroPattern(OCR ocr, Utils utils) {
         System.out.println("欢迎您进入百万英雄游戏模式");
         System.out.println("当题目出现后请按回车，程序运行");
         this.ocr = ocr;
         this.utils = utils;
+    }
+
+    @Override
+    public void reset() {
+        retryCount=0;
     }
 
     @Override
@@ -56,6 +67,10 @@ public class MillionHeroPattern implements Pattern {
         System.out.println("识别时间：" + (System.currentTimeMillis() - beginOfDetect));
         if (questionAndAnswers == null || !questionAndAnswers.contains(QUESTION_FLAG)) {
             System.out.println("问题识别失败，输入回车继续运行");
+            if(retryCount<3) {
+                retryCount++;
+                run();
+            }
             return;
         }
         //获取问题和答案
@@ -87,7 +102,13 @@ public class MillionHeroPattern implements Pattern {
         Search[] searchAnswers = new Search[numOfAnswer];
         FutureTask[] futureQA = new FutureTask[numOfAnswer];
         FutureTask[] futureAnswers = new FutureTask[numOfAnswer];
-        FutureTask futureQuestion = new FutureTask<Long>(new BaiDuSearch(question, true));
+
+        String as="";
+        for (int i = 0; i < answers.length; i++) {
+            as+=(" "+answers[i]);
+        }
+
+        FutureTask futureQuestion = new FutureTask<Long>(new BaiDuSearch(question+ as, true));
         new Thread(futureQuestion).start();
         for (int i = 0; i < numOfAnswer; i++) {
             searchQA[i] = new BaiDuSearch((question + " " + answers[i]), false);
@@ -119,7 +140,11 @@ public class MillionHeroPattern implements Pattern {
         float[] ans = new float[numOfAnswer];
         for (int i = 0; i < numOfAnswer; i++) {
             ans[i] = (float) countQA[i] / (float) (countQuestion * countAnswer[i]);
-            maxIndex = (ans[i] > ans[maxIndex]) ? i : maxIndex;
+            if(question.contains("不是")||question.contains("没有")||question.contains("不能")||question.contains("不正确")||question.contains("不属于")||question.contains("不包括")){
+                maxIndex = (countQA[i] < countQA[maxIndex]) ? i : maxIndex;
+            }else {
+                maxIndex = (countQA[i] > countQA[maxIndex]) ? i : maxIndex;
+            }
         }
         //根据pmi值进行打印搜索结果
         int[] rank = Utils.rank(ans);

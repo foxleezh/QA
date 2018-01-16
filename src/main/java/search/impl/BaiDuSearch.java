@@ -24,7 +24,7 @@ public class BaiDuSearch implements Search {
         this.question = question;
         this.needOpenBrowser = needOpenBrowser;
         this.path = "http://www.baidu.com/s?tn=ichuner&lm=-1&word=" +
-                URLEncoder.encode(question, "gb2312") + "&rn=1";
+                URLEncoder.encode(question, "gb2312") + "&rn=5";
     }
     @Override
     public Long search() throws IOException {

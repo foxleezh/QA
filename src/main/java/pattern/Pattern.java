@@ -9,4 +9,5 @@ import java.io.UnsupportedEncodingException;
  */
 public interface Pattern {
     public void run() throws UnsupportedEncodingException;
+    public void reset();
 }
